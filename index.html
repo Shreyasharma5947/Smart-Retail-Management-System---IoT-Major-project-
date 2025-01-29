@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrated Cart</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(145deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 2.5rem;
+            color: #00e5ff;
+            text-shadow: 0 0 20px rgba(0, 229, 255, 0.8), 0 0 30px rgba(0, 229, 255, 0.5);
+        }
+
+        /* Cart Container */
+        #cart {
+            width: 70%;
+            margin: 30px auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(255, 255, 255, 0.2);
+            border: 2px solid transparent;
+            animation: glowing-border 2s infinite;
+        }
+
+        @keyframes glowing-border {
+            0% {
+                border-color: rgba(0, 255, 255, 0.5);
+                box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+            }
+            50% {
+                border-color: rgba(255, 105, 180, 0.7);
+                box-shadow: 0 0 30px rgba(255, 105, 180, 0.7);
+            }
+            100% {
+                border-color: rgba(0, 255, 255, 0.5);
+                box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+            }
+        }
+
+        #cart h2 {
+            text-align: center;
+            font-size: 1.8rem;
+            color: #00e5ff;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(0, 229, 255, 0.8);
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            text-align: center;
+            padding: 15px;
+            font-size: 1.2rem;
+            color: #fff;
+        }
+
+        th {
+            background: linear-gradient(145deg, #2b2e4a, #3b3e64);
+            border: 1px solid #00e5ff;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), inset 0 0 10px rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        th:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 12px rgba(0, 255, 255, 0.7), inset 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        td {
+            background: linear-gradient(145deg, #1f1f2e, #3b3e64);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.1), 0 4px 6px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        td:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 12px rgba(255, 255, 255, 0.2), inset 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Total */
+        .total {
+            text-align: right;
+            margin-top: 20px;
+            font-size: 1.5rem;
+            color: #00ff6a;
+            font-weight: bold;
+            text-shadow: 0 0 15px rgba(0, 255, 106, 0.8);
+        }
+
+        /* Button */
+        button {
+            display: block;
+            width: 60%;
+            margin: 20px auto;
+            padding: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(145deg, #00e676, #00c853);
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 255, 106, 0.5), 0 -4px 15px rgba(0, 255, 106, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 255, 106, 0.7), 0 -6px 20px rgba(0, 255, 106, 0.5);
+        }
+
+        button:active {
+            transform: translateY(3px);
+            box-shadow: inset 0 4px 15px rgba(0, 255, 106, 0.5), inset 0 -4px 15px rgba(0, 255, 106, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <h1>Integrated Cart</h1>
+    <div id="cart">
+        <h2>Cart</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Amount (₹)</th>
+                </tr>
+            </thead>
+            <tbody id="cart-items">
+                <!-- Dynamic content -->
+            </tbody>
+        </table>
+        <p class="total" id="total"></p>
+        <button id="generate-bill" onclick="generateBill()">Generate Bill</button>
+    </div>
+
+    <script>
+        let total = 0;
+
+        function fetchCart() {
+            fetch('fetch_cart.php')
+                .then(response => response.json())
+                .then(data => {
+                    const cartItems = document.getElementById('cart-items');
+                    const totalElement = document.getElementById('total');
+                    cartItems.innerHTML = ""; // Clear existing content
+                    total = 0; // Reset total
+
+                    data.forEach(item => {
+                        const itemTotal = item.quantity * item.price;
+                        total += itemTotal;
+
+                        cartItems.innerHTML += `
+                            <tr>
+                                <td>${item.item_name}</td>
+                                <td>${item.quantity}</td>
+                                <td>${itemTotal}</td>
+                            </tr>
+                        `;
+                    });
+
+                    totalElement.textContent = `Total: ₹${total}`;
+                })
+                .catch(error => console.error('Error fetching cart:', error));
+        }
+
+        function generateBill() {
+            // Store the total in localStorage
+            localStorage.setItem('totalAmount', total);
+
+            // Redirect to the payment page
+            window.location.href = "payment.html";
+        }
+
+        // Fetch cart data every 2 seconds
+        setInterval(fetchCart, 2000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            background: #f2f2f2;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tabs button {
+            flex: 1;
+            padding: 15px 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .tabs button.active {
+            background: #4caf50;
+            color: #fff;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button.submit {
+            width: 100%;
+            padding: 15px;
+            background: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        button.submit:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('credit-card')">Credit Card</button>
+            <button class="tab-btn" onclick="showTab('net-banking')">Net Banking</button>
+            <button class="tab-btn" onclick="showTab('paypal')">PayPal</button>
+            <button class="tab-btn" onclick="showTab('debit-card')">Debit Card</button>
+        </div>
+
+        <div class="tab-content active" id="credit-card">
+            <h2>Credit Card Payment</h2>
+            <form>
+                <div class="form-group">
+                    <label for="cc-name">Name on Card</label>
+                    <input type="text" id="cc-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="cc-number">Card Number</label>
+                    <input type="text" id="cc-number" required>
+                </div>
+                <div class="form-group">
+                    <label for="cc-expiry">Expiration Date</label>
+                    <input type="month" id="cc-expiry" required>
+                </div>
+                <div class="form-group">
+                    <label for="cc-cvv">CVV</label>
+                    <input type="text" id="cc-cvv" required>
+                </div>
+                <button type="button" class="submit" onclick="submitPayment()">Submit</button>
+            </form>
+        </div>
+
+        <div class="tab-content" id="net-banking">
+            <h2>Net Banking Payment</h2>
+            <form>
+                <div class="form-group">
+                    <label>Select Bank</label>
+                    <select>
+                        <option>Andhra Bank</option>
+                        <option>Allahabad Bank</option>
+                        <option>Bank of Baroda</option>
+                        <option>Canara Bank</option>
+                        <option>IDBI Bank</option>
+                        <option>ICICI Bank</option>
+                        <option>Indian Overseas Bank</option>
+                        <option>Punjab National Bank</option>
+                        <option>South Indian Bank</option>
+                        <option>State Bank of India</option>
+                    </select>
+                </div>
+                <button type="button" class="submit" onclick="submitPayment()">Submit</button>
+            </form>
+        </div>
+
+        <div class="tab-content" id="paypal">
+            <h2>Pay with PayPal</h2>
+            <form>
+                <div class="form-group">
+                    <label for="paypal-email">Email</label>
+                    <input type="email" id="paypal-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="paypal-password">Password</label>
+                    <input type="password" id="paypal-password" required>
+                </div>
+                <button type="button" class="submit" onclick="submitPayment()">Submit</button>
+            </form>
+        </div>
+
+        <div class="tab-content" id="debit-card">
+            <h2>Debit Card Payment</h2>
+            <form>
+                <div class="form-group">
+                    <label for="dc-name">Name on Card</label>
+                    <input type="text" id="dc-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="dc-number">Card Number</label>
+                    <input type="text" id="dc-number" required>
+                </div>
+                <div class="form-group">
+                    <label for="dc-expiry">Expiration Date</label>
+                    <input type="month" id="dc-expiry" required>
+                </div>
+                <div class="form-group">
+                    <label for="dc-cvv">CVV</label>
+                    <input type="text" id="dc-cvv" required>
+                </div>
+                <button type="button" class="submit" onclick="submitPayment()">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function submitPayment() {
+            alert('Payment Successful!');
+            window.location.href = 'checkout.html';
+        }
+    </script>
+
+</body>
+</html>
